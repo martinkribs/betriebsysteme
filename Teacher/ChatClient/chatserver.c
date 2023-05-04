@@ -16,8 +16,12 @@ int main()
 
 	/* eingehende Nachrichten ausgeben ... */
 	while (1) {
-		printf("chatserver (%u): %s\n", ++msg_count, shm->message);
-
+		if (shm->message[0]!=0)
+		{
+			/* code */
+			printf("chatserver (%u): %s\n", ++msg_count, shm->message);
+			shm->message[0] = 0;
+		}
 		/* ein bisschen schlafenlegen ... */
 		sleep(2);
 	}
