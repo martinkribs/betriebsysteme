@@ -12,16 +12,15 @@ int main()
 	int shmid = chat_shm_get();
 
 	struct chat_shm *shm = NULL;
-	shm = (struct chat_shm *) chat_shm_attach(shmid);
+	shm = (struct chat_shm *)chat_shm_attach(shmid);
 
 	/* eingehende Nachrichten ausgeben ... */
-	while (1) {
-		if (shm->message[0]!=0)
-		{
-			/* code */
-			printf("chatserver (%u): %s\n", ++msg_count, shm->message);
-			shm->message[0] = 0;
-		}
+	while (1)
+	{
+		/* code */
+		printf("chatserver (%u): %s\n", ++msg_count, shm->message);
+		shm->message[0] = 0;
+
 		/* ein bisschen schlafenlegen ... */
 		sleep(2);
 	}
