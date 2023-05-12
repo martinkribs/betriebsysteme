@@ -52,12 +52,28 @@ void chat_sem_init(int semid)
 /* Implementierung von P/V */
 void p(int semid, int sem_num)
 {
-	struct sembuf sop;
-	if (semop(semid, &sop, 1))
+	struct sembuf semaphor_operation;
+	semaphor_operation.sem_num = sem_num;
+	/* hier ist das erniedrigen */
+	semaphor_operation.sem_op = -1;
+	semaphor_operation.sem_flg = 0;
+
+	if (semop(semid, &semaphor_operation, 1))
 	{
+		perror("p");
 	}
 }
 
 void v(int semid, int sem_num)
 {
+	struct sembuf semaphor_operation;
+	semaphor_operation.sem_num = sem_num;
+	/* hier ist das erhöhen */
+	semaphor_operation.sem_op = 1;
+	semaphor_operation.sem_flg = 0;
+
+	if (semop(semid, &semaphor_operation, 1))
+	{
+		perror("v");
+	}
 }
