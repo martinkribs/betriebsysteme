@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <signal.h>
 
 #define ANZAHL_PRIESTER 2
 #define AMENOPHIS 0
@@ -27,12 +28,12 @@ int main(void)
 	int i = 0;
 
 	/* Signalhandler registrieren */
-	struct sigaction aktion;
-	aktion.sa_flags = 0;
-	aktion.sa_handler = &programmabbruch;
-	sigemptyset(&aktion.sa_mask);
+	struct sigaction signal_action;
+	signal_action.sa_flags = 0;
+	signal_action.sa_handler = &programmabbruch;
+	sigemptyset(&signal_action.sa_mask);
 
-	if (sigaction(SIGINT, &aktion, NULL) == -1) {
+	if (sigaction(SIGINT, &signal_action, NULL) == -1) {
 		perror("set actionhandler");
 		exit(EXIT_FAILURE);
 	}
@@ -43,7 +44,7 @@ int main(void)
 	 */
 	vaterpid = getpid();
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 
 	for (i = 0; i < ANZAHL_PRIESTER; i++) {
 		priester_pids[i] = erzeugePriester(i);
@@ -123,7 +124,7 @@ void programmabbruch(int sig)
 	/* Pruefen, ob wir im Vaterprozess sind */
 	if (getpid() == vaterpid) {
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 
 	}
 }
