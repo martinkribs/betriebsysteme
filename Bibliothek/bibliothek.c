@@ -9,6 +9,8 @@
 #define ANZAHL_PRIESTER 2
 #define AMENOPHIS 0
 #define BEMENOPHIS 1
+#define KEY_PRIEST 0xfade
+#define KEY_BOOKS 0xcafe
 
 #define PRIESTERNAME(x) ((x) == AMENOPHIS ? "Amenophis" : "Bemenophis")
 
@@ -21,7 +23,12 @@ void heimweg(int priester);
 
 int semid_schriftrollen = 0, semid_priester = 0, vaterpid = 0;
 int priester_pids[ANZAHL_PRIESTER];
-enum STATUS {LESEN, EINTRETEN, WARTEN};
+enum STATUS
+{
+	LESEN,
+	EINTRETEN,
+	WARTEN
+};
 
 int main(void)
 {
@@ -33,7 +40,8 @@ int main(void)
 	signal_action.sa_handler = &programmabbruch;
 	sigemptyset(&signal_action.sa_mask);
 
-	if (sigaction(SIGINT, &signal_action, NULL) == -1) {
+	if (sigaction(SIGINT, &signal_action, NULL) == -1)
+	{
 		perror("set actionhandler");
 		exit(EXIT_FAILURE);
 	}
@@ -45,8 +53,11 @@ int main(void)
 	vaterpid = getpid();
 
 	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	semid_priester = erzeuge_sem(ANZAHL_PRIESTER, KEY_PRIEST);
+	semid_schriftrollen = erzeuge_sem(2, KEY_BOOKS);
 
-	for (i = 0; i < ANZAHL_PRIESTER; i++) {
+	for (i = 0; i < ANZAHL_PRIESTER; i++)
+	{
 		priester_pids[i] = erzeugePriester(i);
 		sleep(1);
 	}
@@ -58,34 +69,41 @@ int main(void)
 void vater(void)
 {
 	printf("\033[0;32mThutmosis (%d): Ich bin Thutmosis, Herrscher ueber das "
-	       "Aegyptische Reich, Verwalter der Bibliothek von Hermopolis!\033[0m\n",
-	       getpid());
+		   "Aegyptische Reich, Verwalter der Bibliothek von Hermopolis!\033[0m\n",
+		   getpid());
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
-
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 }
 
 void kind(int priester)
 {
 	/* Bemenophis trifft spaeter ein. */
-	if (priester == BEMENOPHIS) {
+	if (priester == BEMENOPHIS)
+	{
 		sleep(4);
 	}
 
-	printf("%s (%d): Ich bin %s, auf geht's zur Bibliothek nach Hermopolis.\n", 
-	       PRIESTERNAME(priester), getpid(), PRIESTERNAME(priester));
+	printf("%s (%d): Ich bin %s, auf geht's zur Bibliothek nach Hermopolis.\n",
+		   PRIESTERNAME(priester), getpid(), PRIESTERNAME(priester));
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	p(semid_priester,priester);
 
 	/* Wartezeiten:
 	 * Lesen der ersten Schriftrolle: sleep(3)
 	 * Lesen der zweiten Schriftrolle: sleep(5)
-	 * 
+	 *
 	 * D.h., ein Priester liest in der ersten genommenen Schriftrolle
 	 * kuerzer als in der zweiten.
 	 */
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	p(semid_schriftrollen,0);
+
+	v(semid_schriftrollen,0);
+	p(semid_schriftrollen,1);
+	
+	v(semid_schriftrollen,1);
 
 	/* Hier wird die Zeit des Heimwegs der Priester berechnet. Veraendert
 	 * den Inhalt der Funktion besser nicht, sonst bekommt ihr keine
@@ -93,8 +111,7 @@ void kind(int priester)
 	 */
 	heimweg(priester);
 
-/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
-
+	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 }
 
 void heimweg(int priester)
@@ -104,16 +121,20 @@ void heimweg(int priester)
 	/* Amenophis kommt nach 8 Zeiteinheiten wieder, Bemenophis in immer
 	 * schnelleren Abstaenden.  Dadurch wird der Deadlock provoziert.
 	 */
-	if (priester == AMENOPHIS) {
+	if (priester == AMENOPHIS)
+	{
 		printf("%s (%d): Das reicht fuers erste. In 8 Tagen komme ich wieder!\n",
-		       PRIESTERNAME(priester), getpid());
+			   PRIESTERNAME(priester), getpid());
 		sleep(8);
-	} else {
-		if ((8 - j) < 0) {
+	}
+	else
+	{
+		if ((8 - j) < 0)
+		{
 			j = 0;
 		}
 		printf("%s (%d): Das reicht fuer's erste. In %d Tagen komme ich wieder\n",
-		       PRIESTERNAME(priester), getpid(), 8 - j);
+			   PRIESTERNAME(priester), getpid(), 8 - j);
 		sleep(8 - j);
 		j += 6;
 	}
@@ -122,23 +143,28 @@ void heimweg(int priester)
 void programmabbruch(int sig)
 {
 	/* Pruefen, ob wir im Vaterprozess sind */
-	if (getpid() == vaterpid) {
+	if (getpid() == vaterpid)
+	{
 
-	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
-
+		/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 	}
 }
 
 int erzeugePriester(int priester)
 {
 	int pid = fork();
-	if (pid == -1) {
+	if (pid == -1)
+	{
 		perror("fork");
 		exit(EXIT_FAILURE);
-	} else if (pid == 0) {
+	}
+	else if (pid == 0)
+	{
 		kind(priester);
 		return 0;
-	} else {
+	}
+	else
+	{
 		return pid;
 	}
 }
