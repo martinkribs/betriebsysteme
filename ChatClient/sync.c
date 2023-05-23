@@ -19,7 +19,7 @@ int chat_sem_get()
 	if (semid < 0)
 	{
 		printf("create new semaphore\n");
-		semid = semget(KEY, 1, IPC_EXCL | IPC_CREAT | RIGHTS);
+		semid = semget(KEY, 2, IPC_EXCL | IPC_CREAT | RIGHTS);
 		if (semid < 0)
 		{
 			perror("semget");
@@ -38,42 +38,42 @@ void chat_sem_init(int semid)
 		retval = semctl(semid, 0, SETVAL, 1);
 		if (retval < 0)
 		{
-			perror("semctl SET");
+			printf("ERROR: semctl SET");
 		}
-		retval = semctl(semid, 0, GETVAL);
+		printf("Semaphore 0 hat den Wert %d\n",retval);
+		retval = semctl(semid, 1, SETVAL, 1);
 		if (retval < 0)
 		{
-			perror("semctl GET");
+			printf("ERROR: semctl SET");
 		}
-		printf("Semaphore hat den Wert %d\n",retval);
+		printf("Semaphore 1 hat den Wert %d\n",retval);
 	}
 }
 
-/* Implementierung von P/V */
+/* Implementierung von P verkleinern */
 void p(int semid, int sem_num)
 {
 	struct sembuf semaphor_operation;
 	semaphor_operation.sem_num = sem_num;
-	/* hier ist das erniedrigen */
 	semaphor_operation.sem_op = -1;
 	semaphor_operation.sem_flg = 0;
 
 	if (semop(semid, &semaphor_operation, 1))
 	{
-		perror("p");
+		printf("ERROR: p");
 	}
 }
 
+/* Implementierung von V erhöhen */
 void v(int semid, int sem_num)
 {
 	struct sembuf semaphor_operation;
 	semaphor_operation.sem_num = sem_num;
-	/* hier ist das erhöhen */
 	semaphor_operation.sem_op = 1;
 	semaphor_operation.sem_flg = 0;
 
 	if (semop(semid, &semaphor_operation, 1))
 	{
-		perror("v");
+		printf("ERROR: v");
 	}
 }

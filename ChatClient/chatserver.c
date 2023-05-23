@@ -31,7 +31,7 @@ int main()
 		v(semid,0);
 		
 		/* ein bisschen schlafenlegen ... */
-		sleep(2);
+		/*sleep(2);*/
 	}
 
 	return 0;
