@@ -29,6 +29,11 @@ enum STATUS
 	EINTRETEN,
 	WARTEN
 };
+enum BUCH
+{
+	AUSGELIEHEN,
+	VERFUEGBAR
+};
 
 int main(void)
 {
@@ -54,7 +59,10 @@ int main(void)
 
 	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
 	semid_priester = erzeuge_sem(ANZAHL_PRIESTER, KEY_PRIEST);
+	init_sem(semid_priester, 3, EINTRETEN);
+	
 	semid_schriftrollen = erzeuge_sem(2, KEY_BOOKS);
+	init_sem(semid_schriftrollen, 2, VERFUEGBAR);
 
 	for (i = 0; i < ANZAHL_PRIESTER; i++)
 	{
@@ -87,7 +95,7 @@ void kind(int priester)
 		   PRIESTERNAME(priester), getpid(), PRIESTERNAME(priester));
 
 	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
-	p(semid_priester,priester);
+	p(semid_priester, priester);
 
 	/* Wartezeiten:
 	 * Lesen der ersten Schriftrolle: sleep(3)
@@ -98,12 +106,16 @@ void kind(int priester)
 	 */
 
 	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
-	p(semid_schriftrollen,0);
-
-	v(semid_schriftrollen,0);
-	p(semid_schriftrollen,1);
-	
-	v(semid_schriftrollen,1);
+	p(semid_schriftrollen, 0);
+	printf("%s (%d): Ich bin %s, und lese Schriftrolle 1.\n",
+		   PRIESTERNAME(priester), getpid(), PRIESTERNAME(priester));
+	sleep(3);
+	v(semid_schriftrollen, 0);
+	p(semid_schriftrollen, 1);
+	printf("%s (%d): Ich bin %s, und lese Schriftrolle 2.\n",
+		   PRIESTERNAME(priester), getpid(), PRIESTERNAME(priester));
+	sleep(5);
+	v(semid_schriftrollen, 1);
 
 	/* Hier wird die Zeit des Heimwegs der Priester berechnet. Veraendert
 	 * den Inhalt der Funktion besser nicht, sonst bekommt ihr keine
@@ -112,6 +124,7 @@ void kind(int priester)
 	heimweg(priester);
 
 	/* HIER MUSS EUER CODE EINGEFUEGT WERDEN */
+	v(semid_priester, priester);
 }
 
 void heimweg(int priester)
