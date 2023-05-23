@@ -22,7 +22,7 @@ int chat_sem_get()
 		semid = semget(KEY, 2, IPC_EXCL | IPC_CREAT | RIGHTS);
 		if (semid < 0)
 		{
-			perror("semget");
+			printf("ERROR: semget");
 			return -1;
 		}
 	}
