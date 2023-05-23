@@ -17,6 +17,9 @@ int main()
 	/* semaphore bekommen */
 	semid = chat_sem_get();
 
+	/* initialisieren der Werte der Semaphoren */
+	chat_sem_init(semid);
+
 	/* eingehende Nachrichten ausgeben ... */
 	while (1)
 	{
