@@ -181,3 +181,16 @@ int erzeugePriester(int priester)
 		return pid;
 	}
 }
+
+void deadlock_observer(void)
+{
+	int array[2];
+	int i;
+
+	for(i=0;i<2;i++){
+		array[i] = systemctl(semid_priester, i , GETVAL);
+	}
+	if(array[i]){
+
+	}
+}

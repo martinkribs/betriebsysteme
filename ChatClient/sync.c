@@ -5,7 +5,7 @@
 #include <sys/sem.h>
 
 #include "sync.h"
-#define KEY 0xdaffee /* ein Schlüssel zur Suche nach Sem.-Mengen*/
+#define KEY 0xcaffee /* ein Schlüssel zur Suche nach Sem.-Mengen*/
 #define RIGHTS 0600	 /* volle Zugriffsrechte für den Benutzer*/
 
 /* Semaphor-Operationen */
