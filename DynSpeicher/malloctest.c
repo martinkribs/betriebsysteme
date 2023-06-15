@@ -27,7 +27,7 @@ static void checked_nfalloc(SAllocInfo *pai /*in-out*/)
 		fprintf(stderr, "Speicher alle (%ul bytes)!\n", pai->size);
 		exit(1);
 	}
-	/* Gr��e an den Anfang und Gr��e*2 ans Ende */
+	/* Gr��e an den Anfang und Größe*2 ans Ende */
 	*((unsigned *)pai->ptr) = pai->size;
 	*(((unsigned *)pai->ptr) + (pai->size - sizeof(unsigned)) / sizeof(unsigned)) = pai->size * 2;
 }
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 			checked_nffree(&pData[i]);
 		}
 
-		/* Die Einr�ckung kennzeichnet die paarweisen Aufrufe von alloc/free. */
+		/* Die Einrückung kennzeichnet die paarweisen Aufrufe von alloc/free. */
 		checked_nfalloc(&ai[0]);
 		checked_nfalloc(&ai[1]);
 		checked_nffree(&ai[0]);
