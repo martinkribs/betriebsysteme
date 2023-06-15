@@ -22,8 +22,10 @@ dump_free_mem(void)
 	int i;
 
 	fprintf(stderr, "Freispeicherliste: ");
-	for (i = 0; i < sizeof(free_list); ++i) {
-		if ((i % 32) == 0) {
+	for (i = 0; i < sizeof(free_list); ++i)
+	{
+		if ((i % 32) == 0)
+		{
 			fprintf(stderr, "\n%03X: ", i);
 		}
 		fprintf(stderr, "%02X ", free_list[i]);
@@ -31,7 +33,7 @@ dump_free_mem(void)
 	fprintf(stderr, "\n");
 }
 #else
-#  define dump_free_mem()
+#define dump_free_mem()
 #endif
 
 /* rechnet aus, wie viele Chunks fuer 'size' Bytes belegt werden muessen
@@ -39,9 +41,12 @@ dump_free_mem(void)
 static size_t
 size_to_chunks(size_t size)
 {
-	if ((size % CHUNK_SIZE) != 0) {
+	if ((size % CHUNK_SIZE) != 0)
+	{
 		return size / CHUNK_SIZE + 1;
-	} else {
+	}
+	else
+	{
 		return size / CHUNK_SIZE;
 	}
 }
@@ -83,8 +88,7 @@ nf_alloc(size_t size)
 	return NULL;
 }
 
-void
-nf_free(void *ptr, size_t size)
+void nf_free(void *ptr, size_t size)
 {
 
 	/* HIER MUESST IHR EUREN CODE EINFUEGEN! */
