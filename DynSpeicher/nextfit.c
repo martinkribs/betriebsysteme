@@ -16,8 +16,8 @@ static unsigned char free_list[MEM_POOL_SIZE / CHUNK_SIZE / 8];
 
 /* Funktion zum Debuggen, die die Freispeicher-Bitliste ausgibt */
 #ifdef DEBUG
-static void
-dump_free_mem(void)
+
+static void dump_free_mem(void)
 {
 	int i;
 
@@ -38,8 +38,7 @@ dump_free_mem(void)
 
 /* rechnet aus, wie viele Chunks fuer 'size' Bytes belegt werden muessen
    (rundet automatisch auf) */
-static size_t
-size_to_chunks(size_t size)
+static size_t size_to_chunks(size_t size)
 {
 	if ((size % CHUNK_SIZE) != 0)
 	{
@@ -53,30 +52,26 @@ size_to_chunks(size_t size)
 
 /* testet, ob im Bitfeld bitfield das Bit bitnr gesetzt ist:
  * liefert 0, wenn es nicht gesetzt ist, sonst eine Zahl > 0 */
-static int
-bit_is_set(const unsigned char *bitfield, unsigned bitnr)
+static int bit_is_set(const unsigned char *bitfield, unsigned bitnr)
 {
 	return (bitfield[bitnr / 8] & (1 << (7 - bitnr % 8)));
 }
 
 /* setzt im Bitfeld bitfield das Bit mit der Nummer bitnr */
-static void
-set_bit(unsigned char *bitfield, unsigned bitnr)
+static void set_bit(unsigned char *bitfield, unsigned bitnr)
 {
 	bitfield[bitnr / 8] |= 1 << (7 - bitnr % 8);
 }
 
 /* loescht im Bitfeld bitfield das Bit mit der Nummer bitnr */
-static void
-clear_bit(unsigned char *bitfield, unsigned bitnr)
+static void clear_bit(unsigned char *bitfield, unsigned bitnr)
 {
 	bitfield[bitnr / 8] &= ~(1 << (7 - bitnr % 8));
 }
 
 /* ----------------------------- Speicherverwaltung ----------------------------- */
 
-void *
-nf_alloc(size_t size)
+void *nf_alloc(size_t size)
 {
 
 	dump_free_mem();
