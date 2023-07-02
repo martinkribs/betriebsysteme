@@ -79,13 +79,15 @@ void *nf_alloc(size_t size)
 	/* HIER MUESST IHR EUREN CODE EINFUEGEN! */
 
 	/* 
-	Diese Funktion wird aufgerufen mit dem Auftrag Speicher der Größe size zu belegen
+	Diese Funktion wird aufgerufen mit dem Auftrag Speicher der Größe size zu belegen "alloziieren"
 	1. mit n=size_to_chunks(size) die Anzahl der Chunks berechnen
 	2. wir müssen n freie, hintereinander liegende bits in der Bitliste free_list finden, ausgehend vom letzten Zugriff
 		-> wir müssen irgendwo den letzten Zugriff speichern, e.g. neue globale Variable "lastAsccess"
 		-> da es nextfit ist, müssen wir bei lastAccess anfangen bis Ende, und dann von Anfang bis lastAccess
-		-> return (offset + position*CHUNK_SIZE), offset = &mem_pool, wenn gefunden, sonst NULL
-	3. 
+			hier können zwei for Schleifen benutzt werden, und die Hilffunktionen bit_is_set(freelist, position)
+		-> gefundenen Speicher mit setbit(freelist, position) reservieren
+		   lastAccess aktualisieren auf die gefundene position+n
+		   return (offset + position*CHUNK_SIZE), offset = &mem_pool, wenn gefunden, sonst NULL
 	*/
 
 	/* DENKT AUCH DARAN, DAS "return NULL;" GEEIGNET ANZUPASSEN! */
